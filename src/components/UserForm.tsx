@@ -3,6 +3,8 @@ import TextField from "@mui/material/TextField";
 import { useState, useEffect } from "react";
 import { getUser } from "../libs/data";
 import Button from "@mui/material/Button";
+import { useQuery, useSubscription } from "@apollo/client";
+import { CHARGER_SUBSCRIPTION, CHARGER_QUERY } from "../graphql/query";
 
 interface IProps {
   id: string;
@@ -10,6 +12,10 @@ interface IProps {
 
 const UserForm = ({ id }: IProps) => {
   const [user, setUser] = useState<User | null>(null);
+
+  const {data} = useSubscription(CHARGER_SUBSCRIPTION)
+  // const {data} = useQuery(CHARGER_QUERY)
+
   useEffect(() => {
     if (id) {
       setUser(getUser(id));
@@ -48,6 +54,9 @@ const UserForm = ({ id }: IProps) => {
       </Box>
       <Box>
         <Button variant="contained">Save</Button>
+      </Box>
+      <Box>
+        {data?.api_charger && <Box>{JSON.stringify(data)}</Box>}
       </Box>
     </Box>
   );
